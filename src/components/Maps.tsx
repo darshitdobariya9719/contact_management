@@ -1,5 +1,5 @@
-import React from 'react';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import React, { useState } from 'react';
+import { GoogleMap, InfoWindow, LoadScript, Marker } from '@react-google-maps/api';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 const containerStyle = {
@@ -21,6 +21,7 @@ const center = {
   lng: 65,
 };
 const MapComponent: React.FC = () => {
+  const [selectedMarker, setSelectedMarker] = useState<Country | null>(null);
     // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data } = useQuery<Country[]>('countryCases', async () => {
     const response = await axios.get('https://disease.sh/v3/covid-19/countries');
@@ -34,8 +35,16 @@ const MapComponent: React.FC = () => {
     <LoadScript googleMapsApiKey="AIzaSyA5XIRlzPvqaYj95wpWtkulODUC_0Bitt8">
       <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
         {data.map((marker, index) => (
-          <Marker key={index} position={{ lat: marker.countryInfo.lat, lng: marker.countryInfo.long }} />
+          <Marker key={index} position={{ lat: marker.countryInfo.lat, lng: marker.countryInfo.long }} onClick={() => setSelectedMarker(marker)} />
         ))}
+        {selectedMarker && (
+          <InfoWindow
+            position={{ lat: selectedMarker.countryInfo.lat, lng: selectedMarker.countryInfo.long }}
+            onCloseClick={() => setSelectedMarker(null)}
+          >
+            <div>{/* Your text content */}</div>
+          </InfoWindow>
+        )}
       </GoogleMap>
     </LoadScript>
     </div>
