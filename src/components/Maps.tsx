@@ -8,6 +8,8 @@ const containerStyle = {
 };
 
 interface Country {
+    todayRecovered: number;
+    todayCases: number;
     country: string;
     cases: number;
     deaths: number;
@@ -42,7 +44,22 @@ const MapComponent: React.FC = () => {
             position={{ lat: selectedMarker.countryInfo.lat, lng: selectedMarker.countryInfo.long }}
             onCloseClick={() => setSelectedMarker(null)}
           >
-            <div>{/* Your text content */}</div>
+           <div className="w-full md:w-1/2 lg:w-full max-w-md mx-auto bg-white shadow-md rounded-md overflow-hidden">
+              <div className="p-4">
+                <p className="text-gray-600 mt-2">
+                  <span className="font-semibold">Cases:</span>
+                  {selectedMarker.cases}
+                </p>
+                <p className="text-gray-600 mt-2">
+                  <span className="font-semibold">Today Cases:</span>
+                  {selectedMarker.todayCases}
+                </p>
+                <p className="text-gray-600 mt-2">
+                  <span className="font-semibold">Today Recovered:</span>
+                  {selectedMarker.todayRecovered}
+                </p>
+              </div>
+            </div>
           </InfoWindow>
         )}
       </GoogleMap>
